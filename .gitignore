@@ -1,5 +1,4 @@
 *.iml
-*/.idea/
-*/.lift/
-*/bin/
-*/lib/
+/.idea/
+/.lift/
+/bin/

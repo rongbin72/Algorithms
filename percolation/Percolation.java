@@ -1,10 +1,10 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private WeightedQuickUnionUF grid;
+    private final WeightedQuickUnionUF grid;
     private boolean[] isOpen;
-    private int width;  // width of grid (n)
-    private int gridSize;  // total number of sites (n * n)
+    private final int width;  // width of grid (n)
+    private final int gridSize;  // total number of sites (n * n)
     private int openSites;  // number of open sites
 
     /**
@@ -131,17 +131,6 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
-        Percolation p = new Percolation(3);
-        p.open(1, 1);
-        p.open(1, 2);
-        p.open(2, 2);
-        p.open(2, 3);
-        p.open(3, 3);
 
-        boolean isPercolat = p.percolates();
-        boolean isFull = p.isFull(2, 2);
-        boolean isOpen = p.isOpen(2, 2);
-        int n = p.numberOfOpenSites();
-        System.out.println();
     }
 }

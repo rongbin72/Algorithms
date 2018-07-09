@@ -2,7 +2,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private double[] thresholds;
+    private final double[] thresholds;
     private int t;
 
     /**

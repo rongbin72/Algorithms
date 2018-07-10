@@ -1,5 +1,6 @@
 *.iml
 *.pdf
+*.zip
 /.idea/
 /.lift/
 /bin/

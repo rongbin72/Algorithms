@@ -119,7 +119,6 @@ public class Percolation {
 
     private void validateIndex(int row, int col) {
         if (row < 1 || col < 0 || row > width || col > width) {
-            System.err.printf("Index out of bound => %d:%d", row, col);
             throw new IllegalArgumentException();
         }
     }

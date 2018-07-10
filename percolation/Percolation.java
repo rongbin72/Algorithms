@@ -13,6 +13,7 @@ public class Percolation {
      * @param n width of the gird
      */
     public Percolation(int n) {
+        if (n < 1) throw new IllegalArgumentException();
         openSites = 0;
         width = n;
         gridSize = n * n;

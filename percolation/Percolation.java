@@ -20,10 +20,8 @@ public class Percolation {
         // 2 Means two virtual sites at the top and botton
         grid = new WeightedQuickUnionUF(gridSize + 2);
         // size n + 1 for convience of access (index between [1, n])
+        // new boolean[] is initialized with all default value false
         isOpen = new boolean[gridSize + 2];
-        for (int i = 0; i < gridSize + 2; i++) {
-            isOpen[i] = false;
-        }
         // open two virtual sites
         isOpen[0] = true;
         isOpen[gridSize + 1] = true;

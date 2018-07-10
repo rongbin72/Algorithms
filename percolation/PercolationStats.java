@@ -3,6 +3,8 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private final double[] thresholds;
+    private double mean;
+    private double stddev;
     private int t;
 
     /**
@@ -45,7 +47,8 @@ public class PercolationStats {
      * @return mean
      */
     public double mean() {
-        return StdStats.mean(thresholds);
+        mean = StdStats.mean(thresholds);
+        return mean;
     }
 
     /**
@@ -54,7 +57,8 @@ public class PercolationStats {
      * @return std
      */
     public double stddev() {
-        return StdStats.stddev(thresholds);
+        stddev = StdStats.stddev(thresholds);
+        return stddev;
     }
 
     /**
@@ -63,7 +67,7 @@ public class PercolationStats {
      * @return low
      */
     public double confidenceLo() {
-        return mean() - 1.96 * stddev() / Math.sqrt(t);
+        return mean - 1.96 * stddev / Math.sqrt(t);
     }
 
     /**
@@ -72,7 +76,7 @@ public class PercolationStats {
      * @return high
      */
     public double confidenceHi() {
-        return mean() + 1.96 * stddev() / Math.sqrt(t);
+        return  mean + 1.96 * stddev / Math.sqrt(t);
     }
 
     public static void main(String[] args) {

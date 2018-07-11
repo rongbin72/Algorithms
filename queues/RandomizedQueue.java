@@ -77,6 +77,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
         @Override
         public Item next() {
+            if (num == 0) throw new NoSuchElementException();
+
             int random = StdRandom.uniform(num);
             Item item = array[random];
             array[random] = array[num - 1];

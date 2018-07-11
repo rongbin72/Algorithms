@@ -1,13 +1,12 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RandomizedQueueTest {
-    private RandomizedQueue<Integer> rQueue;
-
     @Test
     void size() {
-        rQueue = new RandomizedQueue<>();
+        RandomizedQueue<Integer> rQueue = new RandomizedQueue<>();
         assertTrue(rQueue.isEmpty());
         assertEquals(rQueue.size(), 0);
         for (int n = 0; n < 100; n++) {

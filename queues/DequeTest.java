@@ -11,55 +11,70 @@ class DequeTest {
 
     @org.junit.jupiter.api.Test
     void iter() {
-        Iterator<String> iter = deque.iterator();
-        assertFalse(iter.hasNext());
         deque.addFirst("Second");
         deque.addFirst("First");
         deque.addLast("Last");
+        Iterator<String> iter = deque.iterator();
+        assertTrue(iter.hasNext());
         assertEquals(iter.next(), "First");
         assertEquals(iter.next(), "Second");
         assertEquals(iter.next(), "Last");
         assertFalse(iter.hasNext());
+    }
+
+    @org.junit.jupiter.api.Test
+    void addRemoveFirst() {
         deque = new Deque<>();
-    }
-
-    @org.junit.jupiter.api.Test
-    void isEmpty() {
         assertTrue(deque.isEmpty());
-        deque.addFirst("Second");
+        deque.addFirst("3");
+        deque.addFirst("2");
+        deque.addFirst("1");
         assertFalse(deque.isEmpty());
-    }
-
-    @org.junit.jupiter.api.Test
-    void addFirst() {
-        deque.addFirst("First");
-        assertFalse(deque.isEmpty());
-    }
-
-    @org.junit.jupiter.api.Test
-    void addLast() {
-        deque.addLast("Last");
-        assertFalse(deque.isEmpty());
-    }
-
-    @org.junit.jupiter.api.Test
-    void removeFirst() {
-        String str;
-        str = deque.removeFirst();
-        assertEquals(str, "First");
-    }
-
-    @org.junit.jupiter.api.Test
-    void removeLast() {
-        String str;
-        str = deque.removeLast();
-        assertEquals(str, "Last");
-    }
-
-    @org.junit.jupiter.api.Test
-    void main() {
-        assertFalse(deque.isEmpty());
-        assertEquals(deque.removeFirst(), "Second");
+        assertEquals(deque.removeFirst(), "1");
+        assertEquals(deque.removeFirst(), "2");
+        assertEquals(deque.removeFirst(), "3");
         assertTrue(deque.isEmpty());
     }
+
+    @org.junit.jupiter.api.Test
+    void addRemoveLast() {
+        deque = new Deque<>();
+        assertTrue(deque.isEmpty());
+        deque.addLast("3");
+        deque.addLast("2");
+        deque.addLast("1");
+        assertFalse(deque.isEmpty());
+        assertEquals(deque.removeLast(), "1");
+        assertEquals(deque.removeLast(), "2");
+        assertEquals(deque.removeLast(), "3");
+        assertTrue(deque.isEmpty());
+    }
+
+    @org.junit.jupiter.api.Test
+    void addFirstRemoveLast() {
+        deque = new Deque<>();
+        assertTrue(deque.isEmpty());
+        deque.addFirst("3");
+        deque.addFirst("2");
+        deque.addFirst("1");
+        assertFalse(deque.isEmpty());
+        assertEquals(deque.removeLast(), "3");
+        assertEquals(deque.removeLast(), "2");
+        assertEquals(deque.removeLast(), "1");
+        assertTrue(deque.isEmpty());
+    }
+
+    void addLastRemoveFirst() {
+        deque = new Deque<>();
+        assertTrue(deque.isEmpty());
+        deque.addLast("3");
+        deque.addLast("2");
+        deque.addLast("1");
+        assertFalse(deque.isEmpty());
+        assertEquals(deque.removeFirst(), "3");
+        assertEquals(deque.removeFirst(), "2");
+        assertEquals(deque.removeFirst(), "1");
+        assertTrue(deque.isEmpty());
+    }
+
 }

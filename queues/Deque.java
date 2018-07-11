@@ -14,6 +14,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     public Deque() {
         first = null;
+        last = null;
         n = 0;
         assert check();
     }
@@ -71,16 +72,19 @@ public class Deque<Item> implements Iterable<Item> {
 
     private boolean check() {
         // check a few properties of instance variable 'first'
-        if (n < 0) return false;
-        if (n == 0 && first != null) return false;
-
+        if (n < 0) {
+            return false;
+        }
+        if (n == 0) {
+            if (first != null) return false;
+        }
         else if (n == 1) {
-            if (first == null || first.next != null)
-                return false;
+            if (first == null)      return false;
+            if (first.next != null) return false;
         }
         else {
-            if (first == null || first.next == null)
-                return false;
+            if (first == null)      return false;
+            if (first.next == null) return false;
         }
 
         // check internal consistency of instance variable n

@@ -23,6 +23,10 @@ public class Deque<Item> implements Iterable<Item> {
         return first == null;
     }
 
+    public int size() {
+        return n;
+    }
+
     public void addFirst(Item item) {
         if (item == null) throw new IllegalArgumentException();
 

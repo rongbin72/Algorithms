@@ -67,7 +67,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private Item[] array = arr;
+        private Item[] array = Arrays.copyOf(arr, arr.length);
         private int num = n;
 
         @Override

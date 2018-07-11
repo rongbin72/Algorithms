@@ -133,7 +133,7 @@ public class Deque<Item> implements Iterable<Item> {
         return new DequeIterator();
     }
 
-    public class DequeIterator implements Iterator<Item> {
+    private class DequeIterator implements Iterator<Item> {
         private Node current = first;
 
         @Override
@@ -157,12 +157,6 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public static void main(String[] args) {
-        Deque<String> deque = new Deque<>();
-        deque.addFirst("Second");
-        deque.addFirst("First");
-        deque.addLast("Last");
-        String first = deque.removeFirst();
-        String second = deque.removeFirst();
-        String last = deque.removeFirst();
+
     }
 }

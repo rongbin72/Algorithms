@@ -1,80 +1,93 @@
 import java.util.Iterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DequeTest {
-    private Deque<String> deque;
+    private Deque<Integer> deque;
 
-    public DequeTest() {
-        deque = new Deque<>();
-    }
 
     @org.junit.jupiter.api.Test
-    void iter() {
-        deque.addFirst("Second");
-        deque.addFirst("First");
-        deque.addLast("Last");
-        Iterator<String> iter = deque.iterator();
+    void iterator() {
+        deque = new Deque<>();
+        for (int i = 0; i < 100; i++)
+            deque.addFirst(i);
+
+        Iterator<Integer> iter = deque.iterator();
         assertTrue(iter.hasNext());
-        assertEquals(iter.next(), "First");
-        assertEquals(iter.next(), "Second");
-        assertEquals(iter.next(), "Last");
+        for (int i = 0; i < 100; i++) {
+            Iterator<Integer> iter2 = deque.iterator();
+            assertEquals((int) iter.next(), 99 - i);
+            for (int j = 0; j < 100; j++) {
+                assertEquals((int) iter2.next(), 99 - j);
+            }
+        }
+
         assertFalse(iter.hasNext());
     }
 
     @org.junit.jupiter.api.Test
     void addRemoveFirst() {
         deque = new Deque<>();
-        assertTrue(deque.isEmpty());
-        deque.addFirst("3");
-        deque.addFirst("2");
-        deque.addFirst("1");
-        assertFalse(deque.isEmpty());
-        assertEquals(deque.removeFirst(), "1");
-        assertEquals(deque.removeFirst(), "2");
-        assertEquals(deque.removeFirst(), "3");
-        assertTrue(deque.isEmpty());
+        for (int n = 0; n < 100; n++) {
+            assertTrue(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                deque.addFirst(i);
+
+            assertFalse(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                assertEquals((int) deque.removeFirst(), 99 - i);
+
+            assertTrue(deque.isEmpty());
+        }
     }
 
     @org.junit.jupiter.api.Test
     void addRemoveLast() {
         deque = new Deque<>();
-        assertTrue(deque.isEmpty());
-        deque.addLast("3");
-        deque.addLast("2");
-        deque.addLast("1");
-        assertFalse(deque.isEmpty());
-        assertEquals(deque.removeLast(), "1");
-        assertEquals(deque.removeLast(), "2");
-        assertEquals(deque.removeLast(), "3");
-        assertTrue(deque.isEmpty());
+        for (int n = 0; n < 100; n++) {
+            assertTrue(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                deque.addLast(i);
+
+            assertFalse(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                assertEquals((int) deque.removeLast(), 99 - i);
+
+            assertTrue(deque.isEmpty());
+        }
     }
 
     @org.junit.jupiter.api.Test
     void addFirstRemoveLast() {
         deque = new Deque<>();
-        assertTrue(deque.isEmpty());
-        deque.addFirst("3");
-        deque.addFirst("2");
-        deque.addFirst("1");
-        assertFalse(deque.isEmpty());
-        assertEquals(deque.removeLast(), "3");
-        assertEquals(deque.removeLast(), "2");
-        assertEquals(deque.removeLast(), "1");
-        assertTrue(deque.isEmpty());
+        for (int n = 0; n < 100; n++) {
+            assertTrue(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                deque.addFirst(i);
+
+            assertFalse(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                assertEquals((int)deque.removeLast(), i);
+
+            assertTrue(deque.isEmpty());
+        }
     }
 
     void addLastRemoveFirst() {
         deque = new Deque<>();
-        assertTrue(deque.isEmpty());
-        deque.addLast("3");
-        deque.addLast("2");
-        deque.addLast("1");
-        assertFalse(deque.isEmpty());
-        assertEquals(deque.removeFirst(), "3");
-        assertEquals(deque.removeFirst(), "2");
-        assertEquals(deque.removeFirst(), "1");
-        assertTrue(deque.isEmpty());
+        for (int n = 0; n < 100; n++) {
+            assertTrue(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                deque.addLast(i);
+
+            assertFalse(deque.isEmpty());
+            for (int i = 0; i < 100; i++)
+                assertEquals((int) deque.removeFirst(), i);
+
+            assertTrue(deque.isEmpty());
+        }
     }
 
 }

@@ -1,6 +1,9 @@
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 public class Point implements Comparable<Point> {
 
@@ -63,9 +66,8 @@ public class Point implements Comparable<Point> {
      * if this point is greater than the argument point
      */
     public int compareTo(Point that) {
-        if (this.x == that.x && this.y == that.y) return 0;
-        if (this.y < that.y || (this.y == that.y && this.x < that.x)) return -1;
-        return 1;
+        int diff = this.y - that.y;
+        return diff == 0 ? this.x - that.x : diff;
     }
 
     /**
@@ -75,11 +77,7 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        return (o1, o2) -> {
-            double thisSlop = slopeTo(o1);
-            double thatSlop = slopeTo(o2);
-            return Double.compare(thisSlop, thatSlop);
-        };
+        return (o1, o2) -> Double.compare(slopeTo(o1), slopeTo(o2));
     }
 
 
@@ -97,5 +95,17 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
+        Point o = new Point(0, 0);
+        Point a = new Point(1, 1);
+        Point b = new Point(1, 2);
+        Point c = new Point(1, 3);
+        Point[] arr = { a, c, b };
+        List<Point> ls = new ArrayList<>();
+        ls.add(a);
+        ls.add(c);
+        ls.add(b);
+        ls.sort(o.slopeOrder());
+        Arrays.sort(arr, o.slopeOrder());
+        o = arr[0];
     }
 }

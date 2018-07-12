@@ -10,15 +10,9 @@ public class FastCollinearPoints {
     private List<LineSegment> lines;
 
     public FastCollinearPoints(Point[] points) {
-        if (points == null) throw new IllegalArgumentException();
-        Point[] ps = Arrays.copyOf(points, points.length);
-        for (int i = 0; i < ps.length - 1; i++) {
-            for (int j = i + 1; j < ps.length; j++) {
-                if (ps[i] == null) throw new IllegalArgumentException();
-                if (ps[i].compareTo(ps[j]) == 0) throw new IllegalArgumentException();
-            }
-        }
+        check(points);
 
+        Point[] ps = Arrays.copyOf(points, points.length);
         lines = new ArrayList<>();
         int len = ps.length;
         for (int i = 0; i < len; i++) {
@@ -59,6 +53,18 @@ public class FastCollinearPoints {
 
     public LineSegment[] segments() {
         return lines.toArray(new LineSegment[0]);
+    }
+
+    // could use set to check in O(n) time, but use O(n) extra space
+    // Since set has not mentioned in the course yet, not use it in this assignment
+    private void check(Point[] points) {
+        if (points == null) throw new IllegalArgumentException();
+        for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) throw new IllegalArgumentException();
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i].compareTo(points[j]) == 0) throw new IllegalArgumentException();
+            }
+        }
     }
 
     public static void main(String[] args) {

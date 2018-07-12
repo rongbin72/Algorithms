@@ -24,7 +24,7 @@ public class BruteCollinearPoints {
                                 && points[j].slopeTo(points[k]) == points[k].slopeTo(points[l])) {
 
                             Point[] arr = { points[i], points[j], points[k], points[l] };
-                            Arrays.sort(arr, arr[0].slopeOrder());
+                            Arrays.sort(arr, Point::compareTo);
                             lines.add(new LineSegment(arr[0], arr[arr.length - 1]));
                         }
                     }

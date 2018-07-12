@@ -50,9 +50,8 @@ public class FastCollinearPoints {
     // Since set has not mentioned in the course yet, not use it in this assignment
     private void check(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
+        for(Point p : points) if (p == null) throw new IllegalArgumentException();
         for (int i = 0; i < points.length; i++) {
-            if (points[i] == null || (i + 1 < points.length && points[i + 1] == null))
-                throw new IllegalArgumentException();
             for (int j = i + 1; j < points.length; j++) {
                 if (points[i].compareTo(points[j]) == 0) throw new IllegalArgumentException();
             }

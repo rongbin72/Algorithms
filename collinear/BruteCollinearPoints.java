@@ -15,17 +15,15 @@ public class BruteCollinearPoints {
         }
 
         this.lines = new ArrayList<>();
+        Arrays.sort(points, Point::compareTo);
         int len = points.length;
         for (int i = 0; i < len - 3; i++) {
-            for (int j = 0; j < len - 2; j++) {
-                for (int k = 0; k < len - 1; k++) {
-                    for (int l = 0; l < len; l++) {
+            for (int j = i + 1; j < len - 2; j++) {
+                for (int k = j + 1; k < len - 1; k++) {
+                    for (int l = k + 1; l < len; l++) {
                         if (points[i].slopeTo(points[j]) == points[j].slopeTo(points[k])
                                 && points[j].slopeTo(points[k]) == points[k].slopeTo(points[l])) {
-
-                            Point[] arr = { points[i], points[j], points[k], points[l] };
-                            Arrays.sort(arr, Point::compareTo);
-                            lines.add(new LineSegment(arr[0], arr[arr.length - 1]));
+                            lines.add(new LineSegment(points[i], points[l]));
                         }
                     }
                 }

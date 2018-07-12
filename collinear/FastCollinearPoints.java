@@ -11,33 +11,24 @@ public class FastCollinearPoints {
 
     public FastCollinearPoints(Point[] points) {
         check(points);
-
-        Point[] ps = Arrays.copyOf(points, points.length);
         lines = new ArrayList<>();
-        int len = ps.length;
+        int len = points.length;
         for (int i = 0; i < len; i++) {
-            Point origin = ps[i];
-            Point[] copy = Arrays.copyOf(ps, len);
-            exch(copy, i, len - 1);
-            List<Double> slopLs = new ArrayList<>();
-            for (int j = 0; j < copy.length; j++) {
-                slopLs.add(origin.slopeTo(copy[j]));
-            }
-            Arrays.sort(copy, 0, len - 1, origin.slopeOrder());
-            slopLs = new ArrayList<>();
-            for (int j = 0; j < copy.length; j++) {
-                slopLs.add(origin.slopeTo(copy[j]));
-            }
+            Point origin = points[i];
+            Point[] copy = Arrays.copyOf(points, len);
+            exch(copy, i, 0);
+            Arrays.sort(copy, 1, len, origin.slopeOrder());
             int cnt = 0;
-            for (int j = 0; j < len - 2; j++) {
-                if (origin.slopeTo(copy[j]) != origin.slopeTo(copy[j + 1])) {
-                    if (cnt >= 4) {
-                        lines.add(new LineSegment(origin, copy[j]));
-                    }
+            for (int j = 1; j < len - 1; j++) {
+                if (origin.slopeTo(copy[j]) == origin.slopeTo(copy[j + 1]))
+                    cnt++;
+                else if (cnt >= 2) {
+                    lines.add(new LineSegment(origin, copy[j]));
+                    cnt = 0;
                 }
-                else cnt++;
+                else cnt = 0;
             }
-            if (cnt >= 4) lines.add(new LineSegment(origin, copy[len - 2]));
+            if (cnt >= 2) lines.add(new LineSegment(origin, copy[len - 1]));
         }
     }
 

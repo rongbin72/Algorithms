@@ -7,23 +7,24 @@ public class BruteCollinearPoints {
 
     public BruteCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
-        for (int i = 0; i < points.length - 1; i++) {
-            for (int j = i + 1; j < points.length; j++) {
-                if (points[i] == null) throw new IllegalArgumentException();
-                if (points[i].compareTo(points[j]) == 0) throw new IllegalArgumentException();
+        Point[] ps = Arrays.copyOf(points, points.length);
+        for (int i = 0; i < ps.length - 1; i++) {
+            for (int j = i + 1; j < ps.length; j++) {
+                if (ps[i] == null) throw new IllegalArgumentException();
+                if (ps[i].compareTo(ps[j]) == 0) throw new IllegalArgumentException();
             }
         }
 
         this.lines = new ArrayList<>();
-        Arrays.sort(points, Point::compareTo);
-        int len = points.length;
+        Arrays.sort(ps, Point::compareTo);
+        int len = ps.length;
         for (int i = 0; i < len - 3; i++) {
             for (int j = i + 1; j < len - 2; j++) {
                 for (int k = j + 1; k < len - 1; k++) {
                     for (int l = k + 1; l < len; l++) {
-                        if (points[i].slopeTo(points[j]) == points[j].slopeTo(points[k])
-                                && points[j].slopeTo(points[k]) == points[k].slopeTo(points[l])) {
-                            lines.add(new LineSegment(points[i], points[l]));
+                        if (ps[i].slopeTo(ps[j]) == ps[j].slopeTo(ps[k])
+                                && ps[j].slopeTo(ps[k]) == ps[k].slopeTo(ps[l])) {
+                            lines.add(new LineSegment(ps[i], ps[l]));
                         }
                     }
                 }

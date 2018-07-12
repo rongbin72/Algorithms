@@ -11,18 +11,19 @@ public class FastCollinearPoints {
 
     public FastCollinearPoints(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
-        for (int i = 0; i < points.length - 1; i++) {
-            for (int j = i + 1; j < points.length; j++) {
-                if (points[i] == null) throw new IllegalArgumentException();
-                if (points[i].compareTo(points[j]) == 0) throw new IllegalArgumentException();
+        Point[] ps = Arrays.copyOf(points, points.length);
+        for (int i = 0; i < ps.length - 1; i++) {
+            for (int j = i + 1; j < ps.length; j++) {
+                if (ps[i] == null) throw new IllegalArgumentException();
+                if (ps[i].compareTo(ps[j]) == 0) throw new IllegalArgumentException();
             }
         }
 
         lines = new ArrayList<>();
-        int len = points.length;
+        int len = ps.length;
         for (int i = 0; i < len; i++) {
-            Point origin = points[i];
-            Point[] copy = Arrays.copyOf(points, len);
+            Point origin = ps[i];
+            Point[] copy = Arrays.copyOf(ps, len);
             exch(copy, i, len - 1);
             List<Double> slopLs = new ArrayList<>();
             for (int j = 0; j < copy.length; j++) {

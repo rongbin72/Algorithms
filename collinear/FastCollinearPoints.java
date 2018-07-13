@@ -14,28 +14,26 @@ public class FastCollinearPoints {
         lines = new ArrayList<>();
         int len = points.length;
         for (int i = 0; i < len; i++) {
-            Point origin = points[i];
             Point[] copy = Arrays.copyOf(points, len);
-            exch(copy, i, 0);
-            Arrays.sort(copy, 1, len, origin.slopeOrder());
-            int cnt = 0;
-            for (int j = 1; j < len - 1; j++) {
-                if (origin.slopeTo(copy[j]) == origin.slopeTo(copy[j + 1]))
-                    cnt++;
-                else if (cnt >= 2) {
-                    lines.add(new LineSegment(origin, copy[j]));
-                    cnt = 0;
-                }
-                else cnt = 0;
+            Point origin = copy[i];
+            Arrays.sort(copy, Point::compareTo);
+            Arrays.sort(copy, origin.slopeOrder());
+            // assert origin.compareTo(copy[0]) == 0;
+            /*
+            -INFINITE    1       2 3 4 5
+            ^            ^       ^
+            origin       next    end
+             */
+            for (int next = 1, end = 2; end < len; end++) {
+                while (end < len && origin.slopeTo(copy[next]) == origin.slopeTo(copy[end]))
+                    end++;
+                // Since points are sorted by x y coordinates
+                // the longest collinear line must start with the smallest point
+                if (end - next >= 3 && origin.compareTo(copy[next]) < 0)
+                    lines.add(new LineSegment(origin, copy[end - 1]));
+                next = end;
             }
-            if (cnt >= 2) lines.add(new LineSegment(origin, copy[len - 1]));
         }
-    }
-
-    private void exch(Point[] points, int i, int j) {
-        Point tmp = points[i];
-        points[i] = points[j];
-        points[j] = tmp;
     }
 
     public int numberOfSegments() {
@@ -50,7 +48,7 @@ public class FastCollinearPoints {
     // Since set has not mentioned in the course yet, not use it in this assignment
     private void check(Point[] points) {
         if (points == null) throw new IllegalArgumentException();
-        for(Point p : points) if (p == null) throw new IllegalArgumentException();
+        for (Point p : points) if (p == null) throw new IllegalArgumentException();
         for (int i = 0; i < points.length; i++) {
             for (int j = i + 1; j < points.length; j++) {
                 if (points[i].compareTo(points[j]) == 0) throw new IllegalArgumentException();

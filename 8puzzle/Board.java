@@ -10,9 +10,13 @@ public class Board {
     public Board(int[][] blocks) {
         if (blocks == null) throw new IllegalArgumentException();
 
-        tiles = blocks;
         n = blocks.length;
-
+        tiles = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                tiles[i][j] = blocks[i][j];
+            }
+        }
         // compute manhattan
         int sum = 0;
         for (int i = 0; i < n; i++) {

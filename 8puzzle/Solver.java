@@ -4,14 +4,14 @@ import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
-    private Queue<Board> solution;
-    private boolean isSolvable;
+    private final Queue<Board> solution;
+    private final boolean isSolvable;
     private int moves;
 
     private class Node {
-        private Board board;
-        private Board pre;
-        private int moves;
+        private final Board board;
+        private final Board pre;
+        private final int moves;
 
         Node(Board init, Board p, int m) {
             pre = p;

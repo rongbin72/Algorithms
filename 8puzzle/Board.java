@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Stack;
-import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.Arrays;
 
 public class Board {
     private final int[][] tiles;
@@ -63,29 +64,23 @@ public class Board {
     }
 
     public Board twin() {
-        int x1 = StdRandom.uniform(0, n);
-        int y1 = StdRandom.uniform(0, n);
-        while (x1 == x && y1 == y) {
-            x1 = StdRandom.uniform(0, n);
-            y1 = StdRandom.uniform(0, n);
-        }
-
-        int x2 = StdRandom.uniform(0, n);
-        int y2 = StdRandom.uniform(0, n);
-        while (x2 == x && y2 == y || x1 == x2 && y1 == y2) {
-            x2 = StdRandom.uniform(0, n);
-            y2 = StdRandom.uniform(0, n);
-        }
-
         int[][] arr = new int[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 arr[i][j] = tiles[i][j];
             }
         }
+
+        if (arr[0][0] == 0) exch(arr, 0, 1, 1, 0);
+        else if (arr[0][1] == 0) exch(arr, 0, 0, 1, 0);
+        else exch(arr, 0, 0, 0, 1);
+
+        return new Board(arr);
+    }
+
+    private void exch(int[][] arr, int x1, int y1, int x2, int y2) {
         arr[x1][y1] = tiles[x2][y2];
         arr[x2][y2] = tiles[x1][y1];
-        return new Board(arr);
     }
 
     public boolean equals(Object y) {
@@ -94,13 +89,7 @@ public class Board {
         if (y.getClass() != this.getClass()) return false;
         Board that = (Board) y;
         if (this.n != that.n) return false;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (this.tiles[i][j] != that.tiles[i][j])
-                    return false;
-            }
-        }
-        return true;
+        return Arrays.deepEquals(this.tiles, that.tiles);
     }
 
     public Iterable<Board> neighbors() {
@@ -164,8 +153,5 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board a = new Board(new int[][] { { 1, 2, 0 }, { 4, 5, 3 }, { 7, 8, 6 } });
-        System.out.println(a.manhattan);
-        System.out.println();
     }
 }

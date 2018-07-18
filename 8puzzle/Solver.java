@@ -8,7 +8,7 @@ public class Solver {
     private boolean isSolvable;
     private int moves;
 
-    class Node {
+    private class Node {
         private Board board;
         private Board pre;
         private int moves;

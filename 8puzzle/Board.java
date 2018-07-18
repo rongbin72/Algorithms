@@ -1,6 +1,5 @@
 import edu.princeton.cs.algs4.Stack;
-
-import java.util.Iterator;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class Board {
     private final int[][] tiles;
@@ -19,8 +18,8 @@ public class Board {
                 if (tiles[i][j] == 0) {
                     x = i;
                     y = j;
-                    continue;
-                } // ignore the blank
+                    continue; // ignore the blank
+                }
                 // expected row and col of this nulber
                 int row = tiles[i][j] / n + 1;
                 int col = tiles[i][j] % n == 0 ? n : tiles[i][j] % n;
@@ -53,13 +52,33 @@ public class Board {
     }
 
     public boolean isGoal() {
-
-        return false;
+        return hamming == 0;
     }
 
     public Board twin() {
+        int x1 = StdRandom.uniform(0, n);
+        int y1 = StdRandom.uniform(0, n);
+        while (x1 == x && y1 == y) {
+            x1 = StdRandom.uniform(0, n);
+            y1 = StdRandom.uniform(0, n);
+        }
 
-        return null;
+        int x2 = StdRandom.uniform(0, n);
+        int y2 = StdRandom.uniform(0, n);
+        while (x2 == x && y2 == y || x1 == x2 && y1 == y2) {
+            x2 = StdRandom.uniform(0, n);
+            y2 = StdRandom.uniform(0, n);
+        }
+
+        int[][] arr = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                arr[i][j] = tiles[i][j];
+            }
+        }
+        arr[x1][x1] = tiles[x2][y2];
+        arr[x2][y2] = tiles[x1][y1];
+        return new Board(arr);
     }
 
     public boolean equals(Object y) {
@@ -90,7 +109,7 @@ public class Board {
         // botton
         if (inBoard(x, y + 1))
             neighbors.push(new Board(buildArray(x, y + 1)));
-        
+
         return neighbors;
     }
 
@@ -125,18 +144,21 @@ public class Board {
         return s.toString();
     }
 
+    /**
+     * Check whether a coordinates is valid
+     *
+     * @param x x
+     * @param y x
+     * @return boolean
+     */
     private boolean inBoard(int x, int y) {
         return (0 <= x && x < n) && (0 <= y && y < n);
     }
 
     public static void main(String[] args) {
         Board a = new Board(new int[][] { { 8, 1, 3 }, { 4, 0, 2 }, { 7, 6, 5 } });
-        Board b = new Board(new int[][] { { 0, 1 }, { 3, 2 } });
-        System.out.println(a.manhattan());
-        System.out.println(5 % 3);
-        Iterator<Board> iter = a.neighbors().iterator();
-        while (iter.hasNext()) {
-            System.out.println(iter.next().toString());
+        for (Board board : a.neighbors()) {
+            System.out.println(board.toString());
         }
         System.out.println();
     }

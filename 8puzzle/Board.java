@@ -8,6 +8,8 @@ public class Board {
     private int x, y;  // coordinates of the blank
 
     public Board(int[][] blocks) {
+        if (blocks == null) throw new IllegalArgumentException();
+
         tiles = blocks;
         n = blocks.length;
 

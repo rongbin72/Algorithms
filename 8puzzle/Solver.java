@@ -1,19 +1,70 @@
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
-    public Solver(Board initial) {
+    private Queue<Board> solution;
+    private boolean isSolvable;
+    private int moves;
 
+    class Node {
+        private Board board;
+        private Board pre;
+        private int moves;
+
+        Node(Board init, Board p, int m) {
+            pre = p;
+            board = init;
+            moves = m;
+        }
     }
+
+    public Solver(Board initial) {
+        if (initial == null) throw new IllegalArgumentException();
+
+        moves = 0;
+        solution = new Queue<>();
+
+        MinPQ<Node> pq = new MinPQ<>(
+                (o1, o2) -> (o1.board.manhattan() + o1.moves) - (o2.board.manhattan() + o2.moves));
+        pq.insert(new Node(initial, null, moves));
+
+        MinPQ<Node> pqTwin = new MinPQ<>(
+                (o1, o2) -> (o1.board.manhattan() + o1.moves) - (o2.board.manhattan() + o2.moves));
+        pqTwin.insert(new Node(initial.twin(), null, moves));
+
+        Node searchNode = pq.delMin();
+        Node searchNodeTwin = pqTwin.delMin();
+        while (!(searchNode.board.isGoal() || searchNodeTwin.board.isGoal())) {
+            solution.enqueue(searchNode.board);
+            moves++;
+            for (Board neighbor : searchNode.board.neighbors())
+                if (!neighbor.equals(searchNode.pre))
+                    pq.insert(new Node(neighbor, searchNode.board, moves));
+            searchNode = pq.delMin();
+
+            for (Board neighbor : searchNodeTwin.board.neighbors())
+                if (!neighbor.equals(searchNodeTwin.pre))
+                    pq.insert(new Node(neighbor, searchNodeTwin.board, moves));
+            searchNodeTwin = pq.delMin();
+        }
+
+        isSolvable = searchNode.board.isGoal();
+    }
+
     public boolean isSolvable() {
-        return false;
+        return isSolvable;
     }
+
     public int moves() {
-        return 0;
+        return moves;
     }
+
     public Iterable<Board> solution() {
-        return null;
+        return isSolvable ? solution : null;
     }
+
     public static void main(String[] args) {
         // create initial board from file
         In in = new In(args[0]);

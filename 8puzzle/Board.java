@@ -22,10 +22,11 @@ public class Board {
                     y = j;
                     continue; // ignore the blank
                 }
-                // expected row and col of this nulber
-                int row = tiles[i][j] / n + 1;
-                int col = tiles[i][j] % n == 0 ? n : tiles[i][j] % n;
-                sum += Math.abs(row - (i + 1)) + Math.abs(col - (j + 1));
+                // expected row and col of this number
+                int r = tiles[i][j] % n;
+                int row = r == 0 ? tiles[i][j] / n - 1 : tiles[i][j] / n;
+                int col = r == 0 ? n - 1 : r - 1;
+                sum += Math.abs(row - i) + Math.abs(col - j);
             }
         }
         manhattan = sum;
@@ -78,7 +79,7 @@ public class Board {
                 arr[i][j] = tiles[i][j];
             }
         }
-        arr[x1][x1] = tiles[x2][y2];
+        arr[x1][y1] = tiles[x2][y2];
         arr[x2][y2] = tiles[x1][y1];
         return new Board(arr);
     }
@@ -158,10 +159,8 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board a = new Board(new int[][] { { 8, 1, 3 }, { 4, 0, 2 }, { 7, 6, 5 } });
-        for (Board board : a.neighbors()) {
-            System.out.println(board.toString());
-        }
+        Board a = new Board(new int[][] { { 1, 2, 0 }, { 4, 5, 3 }, { 7, 8, 6 } });
+        System.out.println(a.manhattan);
         System.out.println();
     }
 }

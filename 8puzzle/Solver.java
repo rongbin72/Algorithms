@@ -37,7 +37,6 @@ public class Solver {
         Node searchNode = pq.delMin();
         Node searchNodeTwin = pqTwin.delMin();
         while (!(searchNode.board.isGoal() || searchNodeTwin.board.isGoal())) {
-            solution.enqueue(searchNode.board);
             moves++;
             for (Board neighbor : searchNode.board.neighbors())
                 if (!neighbor.equals(searchNode.pre))
@@ -46,8 +45,9 @@ public class Solver {
 
             for (Board neighbor : searchNodeTwin.board.neighbors())
                 if (!neighbor.equals(searchNodeTwin.pre))
-                    pq.insert(new Node(neighbor, searchNodeTwin.board, moves));
-            searchNodeTwin = pq.delMin();
+                    pqTwin.insert(new Node(neighbor, searchNodeTwin.board, moves));
+            searchNodeTwin = pqTwin.delMin();
+            solution.enqueue(searchNode.board);
         }
 
         isSolvable = searchNode.board.isGoal();
@@ -83,8 +83,11 @@ public class Solver {
             StdOut.println("No solution possible");
         else {
             StdOut.println("Minimum number of moves = " + solver.moves());
-            for (Board board : solver.solution())
+            for (Board board : solver.solution()) {
+                StdOut.println(board.manhattan());
                 StdOut.println(board);
+            }
+
         }
     }
 }

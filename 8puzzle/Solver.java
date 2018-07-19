@@ -1,56 +1,64 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
-import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
-    private final Queue<Board> solution;
+    private final Stack<Board> solution;
     private final boolean isSolvable;
-    private int moves;
+    private final int moves;
 
-    private class Node {
+    private class Node implements Comparable<Node> {
         private final Board board;
-        private final Board pre;
         private final int moves;
+        private final int priority;
+        private final Node pre;
 
-        Node(Board init, Board p, int m) {
-            pre = p;
+        Node(Board init, Node p, int m) {
             board = init;
             moves = m;
+            priority = board.manhattan() + moves;
+            pre = p;
+        }
+
+        @Override
+        public int compareTo(Node that) {
+            int diff = this.priority - that.priority;
+            return diff == 0 ? this.board.manhattan() - that.board.manhattan() : diff;
         }
     }
 
     public Solver(Board initial) {
         if (initial == null) throw new IllegalArgumentException();
 
-        moves = 0;
-        solution = new Queue<>();
-
-        MinPQ<Node> pq = new MinPQ<>(
-                (o1, o2) -> (o1.board.manhattan() + o1.moves) - (o2.board.manhattan() + o2.moves));
-        pq.insert(new Node(initial, null, moves));
-
-        MinPQ<Node> pqTwin = new MinPQ<>(
-                (o1, o2) -> (o1.board.manhattan() + o1.moves) - (o2.board.manhattan() + o2.moves));
-        pqTwin.insert(new Node(initial.twin(), null, moves));
+        solution = new Stack<>();
+        MinPQ<Node> pq = new MinPQ<>();
+        MinPQ<Node> pqTwin = new MinPQ<>();
+        pq.insert(new Node(initial, null, 0));
+        pqTwin.insert(new Node(initial.twin(), null, 0));
 
         Node searchNode = pq.delMin();
         Node searchNodeTwin = pqTwin.delMin();
         while (!(searchNode.board.isGoal() || searchNodeTwin.board.isGoal())) {
-            moves++;
             for (Board neighbor : searchNode.board.neighbors())
-                if (!neighbor.equals(searchNode.pre))
-                    pq.insert(new Node(neighbor, searchNode.board, moves));
+                if (searchNode.pre == null || !neighbor.equals(searchNode.pre.board))
+                    pq.insert(new Node(neighbor, searchNode, searchNode.moves + 1));
             searchNode = pq.delMin();
 
             for (Board neighbor : searchNodeTwin.board.neighbors())
-                if (!neighbor.equals(searchNodeTwin.pre))
-                    pqTwin.insert(new Node(neighbor, searchNodeTwin.board, moves));
+                if (searchNodeTwin.pre == null || !neighbor.equals(searchNodeTwin.pre.board))
+                    pqTwin.insert(new Node(neighbor, searchNodeTwin, searchNodeTwin.moves + 1));
             searchNodeTwin = pqTwin.delMin();
-            solution.enqueue(searchNode.board);
         }
 
         isSolvable = searchNode.board.isGoal();
+        moves = isSolvable ? searchNode.moves : -1;
+
+        solution.push(searchNode.board);
+        while (searchNode.pre != null) {
+            solution.push(searchNode.pre.board);
+            searchNode = searchNode.pre;
+        }
     }
 
     public boolean isSolvable() {
@@ -67,7 +75,7 @@ public class Solver {
 
     public static void main(String[] args) {
         // create initial board from file
-        In in = new In(args[0]);
+        In in = new In("data/" + args[0]);
         int n = in.readInt();
         int[][] blocks = new int[n][n];
         for (int i = 0; i < n; i++)
@@ -84,7 +92,6 @@ public class Solver {
         else {
             StdOut.println("Minimum number of moves = " + solver.moves());
             for (Board board : solver.solution()) {
-                StdOut.println(board.manhattan());
                 StdOut.println(board);
             }
 

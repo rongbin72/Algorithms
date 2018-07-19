@@ -11,20 +11,20 @@ public class Solver {
     private class Node implements Comparable<Node> {
         private final Board board;
         private final int moves;
-        private final int priority;
+        private final int manhattan;
         private final Node pre;
 
         Node(Board init, Node p, int m) {
             board = init;
             moves = m;
-            priority = board.manhattan() + moves;
+            manhattan = board.manhattan();
             pre = p;
         }
 
         @Override
         public int compareTo(Node that) {
-            int diff = this.priority - that.priority;
-            return diff == 0 ? this.board.manhattan() - that.board.manhattan() : diff;
+            int diff = (this.manhattan + this.moves) - (that.manhattan + that.moves);
+            return diff == 0 ? this.manhattan - that.manhattan : diff;
         }
     }
 

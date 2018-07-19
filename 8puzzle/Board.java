@@ -94,17 +94,17 @@ public class Board {
 
     public Iterable<Board> neighbors() {
         Stack<Board> neighbors = new Stack<>();
-        // left
-        if (inBoard(x - 1, y))
+
+        if (inBoard(x - 1, y))  // left
             neighbors.push(new Board(buildArray(x - 1, y)));
-        // top
-        if (inBoard(x, y - 1))
+
+        if (inBoard(x, y - 1))  // top
             neighbors.push(new Board(buildArray(x, y - 1)));
-        // right
-        if (inBoard(x + 1, y))
+
+        if (inBoard(x + 1, y))  // right
             neighbors.push(new Board(buildArray(x + 1, y)));
-        // botton
-        if (inBoard(x, y + 1))
+
+        if (inBoard(x, y + 1))  // botton
             neighbors.push(new Board(buildArray(x, y + 1)));
 
         return neighbors;

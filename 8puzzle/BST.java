@@ -44,9 +44,11 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     private void inorder(Node x, Queue<Key> q) {
         if (x == null) return;
+        // q.enqueue(x.key);  // preorder
         inorder(x.left, q);
-        q.enqueue(x.key);
+        q.enqueue(x.key);     // inorder
         inorder(x.right, q);
+        // q.enqueue(x.key);  // postorder
     }
 
     public Iterable<Key> keys() {

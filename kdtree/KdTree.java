@@ -22,12 +22,15 @@ public class KdTree {
         kt.insert(new Point2D(0.25, 0.75));
         kt.insert(new Point2D(0.5, 0.6));
         kt.insert(new Point2D(0.5, 0.5));
+        kt.insert(new Point2D(0.5, 0.7));
+        kt.insert(new Point2D(0.5, 0.7));
+
 
         System.out.println(kt.contains(new Point2D(0.17, 0.19)));
         System.out.println(kt.contains(new Point2D(0.5, 0.5)));
         System.out.println(kt.contains(new Point2D(0.20, 0.24)));
-        // kt.draw();
-        // Iterable<Point2D> a = kt.range(new RectHV(0, 0.6, 0.5, 1));
+        kt.draw();
+        Iterable<Point2D> a = kt.range(new RectHV(0, 0.6, 0.5, 1));
         Point2D p = kt.nearest(new Point2D(0.55, 0.6));
         System.out.println(kt.contains(new Point2D(0.20, 0.24)));
     }
@@ -52,7 +55,7 @@ public class KdTree {
             size++;
         }
         else if (!contains(p)) {
-            root = insertX(root, p, null);
+            root = insertX(root, p, new double[] { 0, 0, 1, 1 });
             size++;
         }
     }
@@ -65,16 +68,18 @@ public class KdTree {
      * @param rect RectHV for next Node
      * @return Root node after insertion
      */
-    private Node insertX(Node node, Point2D p, RectHV rect) {
-        if (node == null) return new Node(p, rect);
+    private Node insertX(Node node, Point2D p, double[] rect) {
+        if (node == null) return new Node(p, new RectHV(rect[0], rect[1], rect[2], rect[3]));
 
         boolean goLeft = p.x() < node.p.x();
-        if (goLeft) node.lb = insertY(node.lb, p,
-                                      new RectHV(node.rect.xmin(), node.rect.ymin(),
-                                                 node.p.x(), node.rect.ymax()));
-        else node.rt = insertY(node.rt, p,
-                               new RectHV(node.p.x(), node.rect.ymin(),
-                                          node.rect.xmax(), node.rect.ymax()));
+        if (goLeft) {
+            rect[2] = node.p.x();
+            node.lb = insertY(node.lb, p, rect);
+        }
+        else {
+            rect[0] = node.p.x();
+            node.rt = insertY(node.rt, p, rect);
+        }
         return node;
     }
 
@@ -86,15 +91,18 @@ public class KdTree {
      * @param rect RectHV for next Node
      * @return Root node after insertion
      */
-    private Node insertY(Node node, Point2D p, RectHV rect) {
-        if (node == null) return new Node(p, rect);
+    private Node insertY(Node node, Point2D p, double[] rect) {
+        if (node == null) return new Node(p, new RectHV(rect[0], rect[1], rect[2], rect[3]));
 
         boolean goDown = p.y() < node.p.y();
-        if (goDown) node.lb = insertX(node.lb, p, new RectHV(node.rect.xmin(), node.rect.ymin(),
-                                                             node.rect.xmax(), node.p.y()));
-        else node.rt = insertX(node.rt, p,
-                               new RectHV(node.rect.xmin(), node.p.y(),
-                                          node.rect.xmax(), node.rect.ymax()));
+        if (goDown) {
+            rect[3] = node.p.y();
+            node.lb = insertX(node.lb, p, rect);
+        }
+        else {
+            rect[1] = node.p.y();
+            node.rt = insertX(node.rt, p, rect);
+        }
         return node;
     }
 
@@ -107,7 +115,7 @@ public class KdTree {
     private Node getX(Node node, Point2D p) {
         if (node == null) return null;
         if (node.p.equals(p)) return node;
-        boolean goLeft = p.x() <= node.p.x();
+        boolean goLeft = p.x() < node.p.x();
         if (goLeft) return getY(node.lb, p);
         else return getY(node.rt, p);
     }
@@ -115,7 +123,7 @@ public class KdTree {
     private Node getY(Node node, Point2D p) {
         if (node == null) return null;
         if (node.p.equals(p)) return node;
-        boolean goDown = p.y() <= node.p.y();
+        boolean goDown = p.y() < node.p.y();
         if (goDown) return getX(node.lb, p);
         else return getX(node.rt, p);
     }

@@ -1,5 +1,9 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.StdDraw;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KdTree {
     private int size;
@@ -20,6 +24,8 @@ public class KdTree {
         System.out.println(kt.contains(new Point2D(0.17, 0.19)));
         System.out.println(kt.contains(new Point2D(0.5, 0.5)));
         System.out.println(kt.contains(new Point2D(0.20, 0.24)));
+        kt.draw();
+        Iterable<Point2D> a = kt.range(new RectHV(0, 0.6, 0.5, 1));
         System.out.println(kt.contains(new Point2D(0.20, 0.24)));
     }
 
@@ -109,11 +115,48 @@ public class KdTree {
     }
 
     public void draw() {
+        StdDraw.setPenRadius(0.005);
+        root.rect.draw();
+        drawX(root);
+    }
 
+    private void drawX(Node node) {
+        if (node == null) return;
+        StdDraw.setPenColor(StdDraw.RED);
+        StdDraw.setPenRadius(0.005);
+        StdDraw.line(node.p.x(), node.rect.ymin(), node.p.x(), node.rect.ymax());
+
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.02);
+        StdDraw.point(node.p.x(), node.p.y());
+        drawY(node.lb);
+        drawY(node.rt);
+    }
+
+    private void drawY(Node node) {
+        if (node == null) return;
+        StdDraw.setPenColor(StdDraw.BLUE);
+        StdDraw.setPenRadius(0.005);
+        StdDraw.line(node.rect.xmin(), node.p.y(), node.rect.xmax(), node.p.y());
+
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.02);
+        StdDraw.point(node.p.x(), node.p.y());
+        drawX(node.lb);
+        drawX(node.rt);
     }
 
     public Iterable<Point2D> range(RectHV rect) {
-        return null;
+        List<Point2D> ls = new ArrayList<>();
+        range(root, rect, ls);
+        return ls;
+    }
+
+    private void range(Node node, RectHV rect, List<Point2D> ls) {
+        if (node == null || !node.rect.intersects(rect)) return;
+        if (rect.contains(node.p)) ls.add(node.p);
+        range(node.lb, rect, ls);
+        range(node.rt, rect, ls);
     }
 
     public Point2D nearest(Point2D p) {
